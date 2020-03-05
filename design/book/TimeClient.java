@@ -13,7 +13,7 @@ public class TimeClient extends Thread {
 	JLabel jlb_time2 = new JLabel("현재시간",JLabel.CENTER);
 	//run메소드보다 TimeClient생성자가 반드시 먼저 실행되어야한다 대기시간때문에
 	public TimeClient(){
-		jf.add("North",jlb_time);
+		jf.add("North",jlb_time2);
 		jf.setSize(500, 400);
 		jf.setVisible(true);
 	}

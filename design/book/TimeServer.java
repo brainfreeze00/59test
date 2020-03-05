@@ -49,11 +49,11 @@ public class TimeServer extends JFrame implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		jta_log.append("TimeServer started successfully.....\n");//다잉테스트
 		while(true) { //while(true){}무한루프 - 탈출불가 
 			try { // 네트워크라 예외 처리 꼭해야함
 		//클라이언트 측에서 접속해온 정보를 client 소켓에게 넘김
 				socket = server.accept();//대기 클라이언트 응대 - accept()
+				jta_log.append("TimeServer started successfully.....\n");//다잉테스트
 				jta_log.append("New Client connected...."+socket.toString()+"\n");//클라이언트의 정보가 출력
 				tst = new TimeServerThread(this);//부모 클래스 정보받기위해
 				tst.start();
@@ -68,13 +68,7 @@ public class TimeServer extends JFrame implements Runnable {
 	 * 복사본을 사용하는 것이 아니라 메인에서 접속한 클라이언트의 원본을 사용해야하니까
 	 */
 	public static void main(String[] args) {
-		TimeServer ts = new TimeServer();//파라미터 - 소켓 client
-		/*지속적으로 1초에 한번씩 기다렸다 찍어야할때 쓰레드가 필요하다.
-		 *쓰레드 : 기다림을 메소드로 지원  1000 = 1초 sleep 기다려 
-		 */
-		ts.initDisplay(); //화면을 그리고  난뒤 스레드 대기를 타도록 해야함
-		Thread th = new Thread(ts);
-		th.start();//java.lang.Thread 스레드의 run메소드를 호출하는 메소드 - 쓰레드를 동작시킴
+		
 	}//main
 	public void initDisplay() {
 		this.setTitle("TimeServer 로그");
