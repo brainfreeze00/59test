@@ -29,17 +29,17 @@ public class TimeClient extends Thread {
 		ObjectInputStream ois = null;//읽기 - 듣기
 		ObjectOutputStream oos = null;//말하기 - 쓰기
 		try {
-			socket = new Socket("192.168.0.240",3000);//서버 ip,port
-			oos  = new ObjectOutputStream(socket.getOutputStream());
+			socket = new Socket("192.168.0.240",3000);//서버 ip,port // 나만의 소켓 
+			oos  = new ObjectOutputStream(socket.getOutputStream()); 
 			//클라이언트가 말한 내용을 듣기
 			ois = new ObjectInputStream(socket.getInputStream());
 			while(true) {
-				time = (String)ois.readObject();
+				time = (String)ois.readObject(); //서버에 있는 나의 스트림 
 				if(time!=null) {
 					//System.out.println(time);
 					Font f = new Font("sans serif",Font.BOLD,30);
-					jlb_time.setFont(f);
-					jlb_time.setText(time);//시간을 화면에 띄우기위해 time대입
+					jlb_time2.setFont(f);
+					jlb_time2.setText(time);//시간을 화면에 띄우기위해 time대입
 					try {
 						sleep(1000);
 					} catch (InterruptedException ie) {

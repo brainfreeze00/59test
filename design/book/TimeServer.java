@@ -52,7 +52,7 @@ public class TimeServer extends JFrame implements Runnable {
 		while(true) { //while(true){}무한루프 - 탈출불가 
 			try { // 네트워크라 예외 처리 꼭해야함
 		//클라이언트 측에서 접속해온 정보를 client 소켓에게 넘김
-				socket = server.accept();//대기 클라이언트 응대 - accept()
+				socket = server.accept();//대기 클라이언트 응대 - accept() 그사람의 소켓에 스트림에 저장 
 				jta_log.append("TimeServer started successfully.....\n");//다잉테스트
 				jta_log.append("New Client connected...."+socket.toString()+"\n");//클라이언트의 정보가 출력
 				tst = new TimeServerThread(this);//부모 클래스 정보받기위해
@@ -68,7 +68,10 @@ public class TimeServer extends JFrame implements Runnable {
 	 * 복사본을 사용하는 것이 아니라 메인에서 접속한 클라이언트의 원본을 사용해야하니까
 	 */
 	public static void main(String[] args) {
-		
+	 TimeServer ts =	new TimeServer();
+	 ts.initDisplay();
+	 Thread th = new Thread(ts);
+	 th.start();
 	}//main
 	public void initDisplay() {
 		this.setTitle("TimeServer 로그");
