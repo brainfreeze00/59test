@@ -1,0 +1,10 @@
+CREATE TABLE bank.MEMBER
+(
+  MEM_ID    VARCHAR2(30 BYTE) constraints member_id_pk primary key,
+  MEM_PW    VARCHAR2(300 BYTE),
+  MEM_NAME  VARCHAR2(50 BYTE),
+  EMAIL     VARCHAR2(30) NULL,
+  ACC_NUM   VARCHAR2(20),
+  OPENDAY   VARCHAR2(20),
+  BALANCE   NUMBER(10) default 0
+)
