@@ -62,6 +62,40 @@ public class BookDialog extends JDialog implements ActionListener {
 		this.setVisible(isView);//생성자로는 시간차가 발생하므로 직접 메소드에 기입한다
 		initDisplay(); // 사이즈 유지위해서 호출
 	}  
+	public void set(String text, boolean isView, boolean editable, BookVO rbVO, BookApp ba) {
+		this.ba = ba; // 초기화
+		setValue(rbVO); // 입력 | 수정, 상세
+		setEditable(editable); //실행됐을때 되야하니
+		this.setTitle(title);//생성자로는 시간차가 발생하므로 직접 메소드에 기입한다
+		this.setVisible(isView);//생성자로는 시간차가 발생하므로 직접 메소드에 기입한다
+		initDisplay(); // 사이즈 유지위해서 호출
+		
+	}
+	public void setValue(Map<String, Object> rmap) { //rmap이 있을때 호출
+		//입력을 위한 화면 설정 - 모든 값을  빈문자열로 셋팅한다.
+		if(rmap == null) {
+			setB_Title("");
+		}
+		//상세조회와 수정시는 파라미터로 받은 값으로 셋팅한다.
+		else{
+			setB_Title(rmap.get("b_title").toString());
+//			setB_Title(rmap.get("b_author").toString());
+//			setB_Title(rmap.get("b_publish").toString());
+		}
+	}
+	private void setValue(BookVO rbVO) {
+		//입력을 위한 화면 설정 - 모든 값을  빈문자열로 셋팅한다.
+				if(rbVO == null) {
+					setB_Title("");
+				}
+				//상세조회와 수정시는 파라미터로 받은 값으로 셋팅한다.
+				else{
+					setB_Title(rbVO.getB_name());
+//					setB_Title(rbVO.get("b_author").toString());
+//					setB_Title(rbVO.get("b_publish").toString());
+				}
+		
+	}
 	public void initDisplay() { //나중에 쓸일 있어서 내비둠
 		jp_center.setLayout(null);
 		jp_south.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -84,21 +118,14 @@ public class BookDialog extends JDialog implements ActionListener {
 		this.setSize(500, 450);
 		//부모창에서 선택한 버튼에 따라 화면을 제어한다. - 변수
 	}
-	public void setValue(Map<String, Object> rmap) { //rmap이 있을때 호출
-		//입력을 위한 화면 설정 - 모든 값을  빈문자열로 셋팅한다.
-		if(rmap == null) {
-			setB_Title("");
-		}
-		//상세조회와 수정시는 파라미터로 받은 값으로 셋팅한다.
-		else{
-			setB_Title(rmap.get("b_title").toString());
-			setB_Title(rmap.get("b_author").toString());
-			setB_Title(rmap.get("b_publish").toString());
-		}
-	}
+	
 	//각 컬럼의 값들을 설정하거나 읽어오는 getter/setter메소드 입니다.
 	public String getB_Title() { return jtf_title.getText();}
 	public void setB_Title(String title) {jtf_title.setText(title);}
+	public String getB_Author() {return jtf_author.getText();}
+	public void setB_Author(String author) {jtf_author.setText(author);}
+	public String getB_Publish() {return jtf_publish.getText();}
+	public void setB_Publish(String publish) {jtf_publish.setText(publish);}
 //	public static void main(String[] args) {
 //		BookDialog bd = new BookDialog();
 //		bd.set("입력",true,null);
@@ -118,5 +145,6 @@ public class BookDialog extends JDialog implements ActionListener {
 		else if("닫기".equals(command)) {
 			
 		}
-	}
+		
+	}//action
 }

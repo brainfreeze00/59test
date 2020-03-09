@@ -35,9 +35,8 @@ public class TimeClient extends Thread {
 			ois = new ObjectInputStream(socket.getInputStream());
 			while(true) {
 				time = (String)ois.readObject(); //서버에 있는 나의 스트림 
-				if(time!=null) {
 					//System.out.println(time);
-					Font f = new Font("sans serif",Font.BOLD,30);
+					Font f = new Font("sans serif",Font.BOLD,20);
 					jlb_time2.setFont(f);
 					jlb_time2.setText(time);//시간을 화면에 띄우기위해 time대입
 					try {
@@ -45,7 +44,6 @@ public class TimeClient extends Thread {
 					} catch (InterruptedException ie) {
 						System.out.println("앗 ~~ ...");
 					}
-				}
 			}
 		} catch (Exception ie) {
 			System.out.println("타임 서버에 접속할 수 없습니다.");

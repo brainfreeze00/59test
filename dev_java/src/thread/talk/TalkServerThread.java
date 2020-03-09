@@ -53,10 +53,10 @@ public class TalkServerThread extends Thread {
 	public void broadCasting(String msg) {
 		//현재 서버에 몇 사람이 있는지 출력하기
 		ts.jta_log.append("현재 인원수 : "+ts.globalList.size());
-		synchronized(this) {//다른 스레드가 인터셉트 하는 것을 방어하기 위해 동기화처리
-			for(TalkServerThread tst:ts.globalList) { // 기존에 있던 사람들도 전달이 되어야 하므로
-				tst.send(msg); // this 쓸때 -지금들어온너에게만 전달  
-			}
+		synchronized(this) {//다른 스레드가 인터셉트 하는 것을 방어하기 위해 동기화처리 : 클라이언트들에게 맞는 순서대로 하기위해 동기화 처리
+//			for(TalkServerThread tst:ts.globalList) { // 기존에 있던 사람들도 전달이 되어야 하므로
+//				tst.send(msg); // this 쓸때 -지금들어온너에게만 전달  
+//			}
 		}
 	}//////broadCasting
 	//서버에서 클라이언트에게 전송하는 메세지 구현

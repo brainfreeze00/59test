@@ -26,12 +26,12 @@ public class Login extends JFrame {
 			currentName = rMap.get("mem_name").toString();
 			msg2 = 100+"#"+currentName;
 			mem_id =msg2;
-			for(TalkServerThread tst:ts.globalList) {// 진완에게 기존에 먼저 왔던 진아, 정훈의 스레드를 전달
-				//currentName = sbt.nickName;
-				//msg2 = 100+"#"+currentName;
-				// this.send(msg2);
-				this.tst.send(tst.mem_name); 
-			}
+//			for(TalkServerThread tst:ts.globalList) {// 진완에게 기존에 먼저 왔던 진아, 정훈의 스레드를 전달
+//				//currentName = sbt.nickName;
+//				//msg2 = 100+"#"+currentName;
+//				// this.send(msg2);
+//				this.tst.send(tst.mem_name); 
+//			}
 			Vector<String> v = new Vector<>();
 			v.add(tst.setTimer());
 			v.add(nickName);
@@ -42,9 +42,9 @@ public class Login extends JFrame {
 			this.tst.broadCasting(100+"#"+rMap.get("mem_name").toString());//msg = 100#진완 을 넘긴다.
 		}
 		else {//실패 했을때 110
-			for(TalkServerThread sbt:ts.globalList) {// 진완에게 기존에 먼저 왔던 진아, 정훈의 스레드를 전달
-				this.tst.send(110+"#"+mem_id+"님은 로그인 실패입니다.");
-			}
+//			for(TalkServerThread sbt:ts.globalList) {// 진완에게 기존에 먼저 왔던 진아, 정훈의 스레드를 전달
+//				this.tst.send(110+"#"+mem_id+"님은 로그인 실패입니다.");
+//			}
 			this.tst.broadCasting(110+"#"+mem_id+"님은 로그인 실패입니다.");//msg = 100#진완 을 넘긴다.
 		}
 	}
