@@ -16,19 +16,43 @@ public class BookDao {
 	ResultSet rs			= null;
 	
 	public int bookDelete(BookVO pbVO) {
-		int result = 0;
 		System.out.println("bookDelete");
-		result = 1;
-		return result;
-	}
-
-	public int bookInsert(BookVO pbVO) {
 		int result = 0;
-		System.out.println("bookInsert");
 		result = 1;
 		return result;
 	}
 
+	/*
+	 * INSERT into book2020(b_no, b_name, b_author
+                    , b_publish, b_info)
+               VALUES(seq_book_no.nextval,'1'
+               ,'1','1','1')
+	파라미터로 1을 4개 삽입해서 추가해봄. 파라미터는 4개가 필요하다
+	1개 row가 inserted => 1 실패하면 0
+	 */
+	public int bookInsert(BookVO pbVO) {
+		System.out.println("bookInsert");
+		int result = 0;
+		StringBuilder sql = new StringBuilder();
+		try {
+			sql.append ("INSERT into book2020(b_no, b_name, b_author        ");
+            sql.append ("        			, b_publish, b_info)            ");
+            sql.append ("   			VALUES(seq_book_no.nextval,?,?,?,?) ");
+            con = dbMgr.getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			int i = 1;
+			pstmt.setString(i++, pbVO.getB_name());
+			pstmt.setString(i++, pbVO.getB_author());
+			pstmt.setString(i++, pbVO.getB_publish());
+			pstmt.setString(i++, pbVO.getB_info());
+			result = pstmt.executeUpdate();
+			System.out.println("result:"+result);//1이면 입력 성공, 0이면 입력 실패
+		} catch (Exception e) {
+			e.toString();
+		}
+		return result;
+	}
+	
 	public int bookUpdate(BookVO pbVO) {
 		int result = 0;
 		System.out.println("bookUpdate");
@@ -67,13 +91,14 @@ public class BookDao {
 		return rbVO;
 	}
 	//전체조회 구현
-	public List<BookVO> bookList(BookVO pbVO) {
+	public List<BookVO> bookList(BookVO pbVO) {//현재 all이 들어있다. , 조건검색한다면 b_no, b_name등 정보를 담을수 있다.
 		System.out.println("bookList() 호출성공");
 		List<BookVO> bookList = new ArrayList<>(); //bookList.size()=0
 		StringBuilder sql = new StringBuilder();
 		try {
 			sql.append(" SELECT b_no, b_name, b_author, b_publish");
 			sql.append(" FROM book2020                           ");
+			sql.append(" ORDER BY b_no desc                           ");
 			con = dbMgr.getConnection();
 			pstmt = con.prepareStatement(sql.toString());
 			rs = pstmt.executeQuery();
@@ -95,4 +120,16 @@ public class BookDao {
 		}
 		return bookList;
 	}//////////////bookList
+	public static void main(String[] args) {
+		BookDao bd = new BookDao();
+		BookVO pbVO = new BookVO();
+		pbVO.setB_name("1");
+		pbVO.setB_author("2");
+		pbVO.setB_publish("3");
+		pbVO.setB_info("4");
+		bd.bookInsert(pbVO);
+		int result = 0;
+		result = bd.bookInsert(pbVO);
+		System.out.println("result:"+result);
+	}
 }

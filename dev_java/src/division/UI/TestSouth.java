@@ -1,7 +1,6 @@
 package division.UI;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 //JPanel은 단독으로 창을 띄울수 없다.

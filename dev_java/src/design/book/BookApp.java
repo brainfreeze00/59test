@@ -1,5 +1,5 @@
 package design.book;
-
+//MVC 패턴 검색
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,7 +84,8 @@ public class BookApp extends JFrame implements ActionListener {
 	DefaultTableModel dtm_book = new DefaultTableModel(data, cols);        //set
 	JTable jtb_book = new JTable(dtm_book);                                //set
 	JScrollPane jsp_book = new JScrollPane(jtb_book);                      //set
-	BookController bCtrl = new BookController();
+	BookDao bDao = new BookDao();
+	BookController bCtrl = new BookController(this);
 	
 	//이벤트 소스와 이벤트 헨들러 클래스 연결하기
 	public void eventMapping() {
@@ -155,12 +156,12 @@ public class BookApp extends JFrame implements ActionListener {
 		//아래코드가 JFrame의 자원을 회수함
 		//부모 자원이 회수 될때 JDialog도 같이 회수됨
 		this.add("Center", jsp_book); //도서번호 도서명 저자 출판사 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //main+sub둘다 닫기
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //main+sub둘다 닫기 ->자원회수
 		this.setTitle("도서관리시스템");
 		this.add("North",jtbar);//JPanel 화면 넣기 //jp_north -> jtbar로 변경했다. 연습하도록
-		this.add("South",tc.jlb_time2);//JPanel 화면 넣기
+		this.add("South",tc.jlb_time2);//타이머 넣기
 		this.setSize(700, 500);
-		this.setIconImage(bicon.getImage());
+		this.setIconImage(bicon.getImage());//이미지 첨부
 		this.setVisible(true);
 		jbtn_ins.addActionListener(this);
 		jbtn_sel.addActionListener(this);
@@ -179,8 +180,8 @@ public class BookApp extends JFrame implements ActionListener {
 		Thread th = new Thread(ts);
 		th.start();//java.lang.Thread 스레드의 run메소드를 호출하는 메소드 - 쓰레드를 동작시킴
 		ba = new BookApp(); // 스태틱때문에 타입이랑 같이 인스턴스화 하면 안되징!
-		ba.initDisplay();
-		ba.eventMapping(); // 이벤트맵핑호출
+		ba.initDisplay(); //화면 처리부분
+		ba.eventMapping(); //이벤트연결 - 익명클래스 처리 이벤트맵핑호출
 	}
 //JButton에 대한 이벤트를 지원하는 인터페이스가 ActionListener임.
 	//클래스 뒤에 implements할것 
@@ -192,8 +193,10 @@ public class BookApp extends JFrame implements ActionListener {
 		//입력버튼을 누른거니?
 		if(obj==jbtn_ins) {
 			System.out.println("입력호출성공");
-			Map<String,Object> rMap = new HashMap<>();
-			bd.set("입력",true, true, rMap, ba);
+			//Map<String,Object> rMap = new HashMap<>();
+			//bd.set("입력",true, true, rMap, ba);
+			BookVO bVO = null;
+			bd.set("입력",true, true, bVO, ba);
 			//initDisplay를 호출한 이유는 setTitle("입력")과 setVisible(true)
 			//때문이었다. 그런데 그 둘을 set메소드로 이전하였다.
 			//insert here
@@ -206,7 +209,7 @@ public class BookApp extends JFrame implements ActionListener {
 			rMap.put("b_title", "자바의 정석");
 			rMap.put("b_author", "남궁성");
 			rMap.put("b_publish", "도우출판");
-			bd.set(jbtn_upd.getText(),true, true, rMap, ba);
+			bd.set("수정",true, true, rMap, ba);
 		}
 		else if(obj==jbtn_sel) {
 			System.out.println("상세조회호출성공");
@@ -224,7 +227,7 @@ public class BookApp extends JFrame implements ActionListener {
 				pbVO.setCommand("detail");
 				pbVO.setB_no(b_no);
 				BookVO rbVO = bCtrl.send(pbVO);
-				bd.set(jbtn_sel.getText(),true, false, rbVO, ba);
+				bd.set("상세보기",true, false, rbVO, ba);
 			}
 			//bd.set(jbtn_sel.getText(),true, false, rMap, ba);
 		}
@@ -243,16 +246,21 @@ public class BookApp extends JFrame implements ActionListener {
 		BookVO pbVO = new BookVO();
 		pbVO.setCommand("all");
 		bookList = bCtrl.sendALL(pbVO);
-		while(dtm_book.getRowCount()>0) {
-			dtm_book.removeRow(0);
+		//기존에 조회된  결과를 출력한 화면은 삭제처리한다.
+		while(dtm_book.getRowCount()>0) {// bookList.size() 숫자와 동일
+			dtm_book.removeRow(0); // 계속 로우수만큼 반복하면서 첫번째 로우 즉 0번 계속 지워준다.
 		}
-		for(int i=0;i<bookList.size();i++) {
+		//삭제한 후 다시 출력하기
+		for(int i=0;i<bookList.size();i++) { // 사용자에게 응답을 하는 부분
 			BookVO bVO = bookList.get(i);
 			Vector<Object> v = new Vector<>();
 			v.add(bVO.getB_no());
 			v.add(bVO.getB_name());
 			v.add(bVO.getB_author());
 			v.add(bVO.getB_publish());
+			//JTable에 추가하는 것이 아니다. -JTable은 양식일 뿐이고
+			//실제 데이터를 갖는 클래스는 DefaultTableModel 이다 - DataSet 지원함 DataSet : 데이터들의 집합
+			//한개로우는 Vector에 담고 그 벡터를 for문안에서 반복 추가해줌
 			dtm_book.addRow(v);
 		}
 	}///end of refreshData
